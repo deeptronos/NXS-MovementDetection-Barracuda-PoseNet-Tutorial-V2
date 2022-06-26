@@ -41,6 +41,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets/Scripts/LogKeypointMovement.cs" />
      <Compile Include="Assets/Scripts/Utils.cs" />
      <Compile Include="Assets/Scripts/PoseEstimator.cs" />
      <Compile Include="Assets/Scripts/PoseSkeleton.cs" />

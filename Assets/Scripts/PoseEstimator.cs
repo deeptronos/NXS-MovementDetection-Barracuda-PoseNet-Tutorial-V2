@@ -114,8 +114,9 @@ public class PoseEstimator : MonoBehaviour
     private string predictionLayer = "heatmap_predictions"; // The name for the Sigmoid layer that returns the heatmap predictions
 
     private PoseSkeleton[] skeletons; // Array of pose skeletons
-    
-    
+
+   
+
 
     // Start is called before the first frame update
     void Start()

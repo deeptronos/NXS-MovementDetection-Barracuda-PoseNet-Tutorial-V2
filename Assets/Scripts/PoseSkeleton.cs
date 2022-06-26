@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
+//TODO: Using a Hashtable<> data structure, implement tracking the position of specific keypoints. Update the start method, and the UpdateKeyPointPosition 
 
 public class PoseSkeleton
 {
@@ -51,10 +53,19 @@ public class PoseSkeleton
     };
     private float lineWidth; // The width for the skeleton lines
     private Material keypointMat;
+    
+     //private List<Vector2[]> TrackedKeypointData; // A list of arrays of vector 2's.     
+    //private KeyValuePair<string, Vector2[]>[] TrackedKeypointData; // A DS containing the name of the keypoint as a string associated with an array of vector2s representing the keypoint's x/y position record
+
 
     
     public PoseSkeleton(float pointScale = 10f, float lineWidth = 5f) // Constructor
     {
+        
+       // string[] keypointPartsToTrack = new string[]{"nose", "leftWrist", "rightWrist"}; // The names of the keypoints we want to track // TODO remove this redundancy
+       // TrackedKeypointData = new KeyValuePair<string, Vector2[]>[keypointPartsToTrack.Length];
+       // int dataLength = 16; // The max amount of positions logged at any given time
+        
         this.keypoints = new Transform[NUM_KEYPOINTS]; // Initialize keypoints
         // Style:
         Material keypointMat = new Material(Shader.Find("Unlit/Color")); 
@@ -67,9 +78,19 @@ public class PoseSkeleton
             this.keypoints[i].localScale = new Vector3(pointScale, pointScale, 0);
             this.keypoints[i].gameObject.GetComponent<MeshRenderer>().material = keypointMat;
             this.keypoints[i].gameObject.name = partNames[i];
-            
-            
+
+            if (partNames[i] == "nose" || partNames[i] == "leftWrist" || partNames[i] == "rightWrist")
+            {
+                this.keypoints[i].gameObject.AddComponent<LogKeypointMovement>();
+            }
+
         }
+
+        // for (int i = 0; i < keypointPartsToTrack.Length; i++)
+        // {
+        //     TrackedKeypointData[i] = new KeyValuePair<string, Vector2[]>(keypointPartsToTrack[i], new Vector2[dataLength]);
+        // }
+        //
         this.lineWidth = lineWidth;
         
         int numPairs = jointPairs.Length + 1; // The number of joint pairs
@@ -167,6 +188,8 @@ public class PoseSkeleton
     /// <param name="minConfidence"></param>
     public void UpdateKeyPointPositions(Utils.Keypoint[] keypoints, float sourceScale, RenderTexture sourceTexture, bool mirrorImage, float minConfidence)
     {
+        string[] keypointPartsToTrack = new string[]{"nose", "leftWrist", "rightWrist"}; // The names of the keypoints we want to track
+        
         for (int k = 0; k < keypoints.Length; k++) // Iterate through the key points
         {
             if (keypoints[k].score >= minConfidence / 100f) // Check if the current confidence value meets the confidence threshold
@@ -185,9 +208,10 @@ public class PoseSkeleton
             coords.y = sourceTexture.height - coords.y;// Flip the keypoint position vertically
             
             if (mirrorImage) coords.x = sourceTexture.width - coords.x;// Mirror the x position if using a webcam
-
             
             this.keypoints[k].position = new Vector3(coords.x, coords.y, -1f);// Update the current key point location. Set the z value to -1f to place it in front of the video screen
+            
+         
         }
     }
     
@@ -224,6 +248,7 @@ public class PoseSkeleton
             }
         }
     }
-
+    
+    
 
 }
