@@ -17,6 +17,10 @@ public class PoseSkeleton
         "rightShoulder", "leftElbow", "rightElbow", "leftWrist", "rightWrist",
         "leftHip", "rightHip", "leftKnee", "rightKnee", "leftAnkle", "rightAnkle"
     };
+
+    public static List<string> partsToLogData = new List<string>() // The keypoint/parts we want to log the position data of, by their partNames representation.
+        { "nose", "leftShoulder", "rightShoulder", "leftWrist", "rightWrist" };
+    
     private static int NUM_KEYPOINTS = partNames.Length;
     private Tuple<int, int>[] jointPairs = new Tuple<int, int>[]
     {
@@ -78,8 +82,8 @@ public class PoseSkeleton
             this.keypoints[i].localScale = new Vector3(pointScale, pointScale, 0);
             this.keypoints[i].gameObject.GetComponent<MeshRenderer>().material = keypointMat;
             this.keypoints[i].gameObject.name = partNames[i];
-
-            if (partNames[i] == "nose" || partNames[i] == "leftWrist" || partNames[i] == "rightWrist")
+            
+            if(partsToLogData.Contains(partNames[i])) // If this keypoint is a part we want to log data for... 
             {
                 this.keypoints[i].gameObject.AddComponent<LogKeypointMovement>();
             }
