@@ -19,7 +19,7 @@ public class PoseSkeleton
     };
 
     public static List<string> partsToLogData = new List<string>() // The keypoint/parts we want to log the position data of, by their partNames representation.
-        { "nose", "leftShoulder", "rightShoulder", "leftWrist", "rightWrist" };
+        { "nose","leftShoulder", "rightShoulder"};//,  "leftWrist", "rightWrist" };
     
     private static int NUM_KEYPOINTS = partNames.Length;
     private Tuple<int, int>[] jointPairs = new Tuple<int, int>[]
@@ -192,7 +192,6 @@ public class PoseSkeleton
     /// <param name="minConfidence"></param>
     public void UpdateKeyPointPositions(Utils.Keypoint[] keypoints, float sourceScale, RenderTexture sourceTexture, bool mirrorImage, float minConfidence)
     {
-        string[] keypointPartsToTrack = new string[]{"nose", "leftWrist", "rightWrist"}; // The names of the keypoints we want to track
         
         for (int k = 0; k < keypoints.Length; k++) // Iterate through the key points
         {
