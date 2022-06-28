@@ -462,7 +462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   webcamDims: {x: 640, y: 480}
   webcamFPS: 60
-  useWebcam: 0
+  useWebcam: 1
   videoScreen: {fileID: 1337084481}
   posenetShader: {fileID: 7200000, guid: c7f98690ff0a548258aa57c4130819ab, type: 3}
   modelType: 0
