@@ -133,16 +133,18 @@ public class PoseEstimator : MonoBehaviour
             // videoDims.x = webcamTexture.width; // Update the y videoDims
             videoDims.y = webcamDims.y; // Update the x videoDims 
             videoDims.x = webcamDims.x; // Update the y videoDims
+            videoTexture = RenderTexture.GetTemporary(webcamDims.x, webcamDims.y, 24, RenderTextureFormat.ARGBHalf); // Create a new VideoTexture using the current webcam dimensions
         }
         else
         {
             videoDims.x = (int)videoScreen.GetComponent<VideoPlayer>().width; // Update the x videoDim
             videoDims.y = (int)videoScreen.GetComponent<VideoPlayer>().height; // Update the y videoDim
+            videoTexture = RenderTexture.GetTemporary(videoDims.x, videoDims.y, 24, RenderTextureFormat.ARGBHalf); // Create a new VideoTexture using the current video dimensions
 
         }
 
-        //videoTexture = RenderTexture.GetTemporary(videoDims.x, videoDims.y, 24, RenderTextureFormat.ARGBHalf); // Create a new VideoTexture using the current video dimensions
-        videoTexture = RenderTexture.GetTemporary(webcamDims.x, webcamDims.y, 24, RenderTextureFormat.ARGBHalf); // Create a new VideoTexture using the current video dimensions
+        
+        
         InitializeVideoScreen(videoDims.x, videoDims.y, useWebcam); // Initialize the video screen
         InitializeCamera(); // Adjust the in-game camera based on the source video dimensions
         
@@ -151,8 +153,8 @@ public class PoseEstimator : MonoBehaviour
         targetDims.x = (int)(imageDims.y * aspectRatioScale);
         imageDims.x = targetDims.x;
 
-        //rTex = RenderTexture.GetTemporary(imageDims.x, imageDims.y, 24, RenderTextureFormat.ARGBHalf); // Initialize the RenderTexture that will store the processed input image
-        rTex = RenderTexture.GetTemporary(webcamDims.x, webcamDims.y, 0);
+        rTex = RenderTexture.GetTemporary(imageDims.x, imageDims.y, 24, RenderTextureFormat.ARGBHalf); // Initialize the RenderTexture that will store the processed input image
+        //rTex = RenderTexture.GetTemporary(webcamDims.x, webcamDims.y, 0);
         InitializeBarracuda(); // Initialize the Barracuda inference engine based on the selected model
         
         InitializeSkeletons(); // Initialize pose skeletons
@@ -161,24 +163,29 @@ public class PoseEstimator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!webcamTexture.didUpdateThisFrame) return;
+        if (useWebcam)
+        {
+            if (!webcamTexture.didUpdateThisFrame) return;
         
-        videoDims.y = webcamTexture.height; // Update the x videoDims 
-        videoDims.x = webcamTexture.width; // Update the y videoDims
+            videoDims.y = webcamTexture.height; // Update the x videoDims 
+            videoDims.x = webcamTexture.width; // Update the y videoDims
         
-        var aspect1 = (float)webcamTexture.width / webcamTexture.height;
-        var aspect2 = (float)rTex.width / rTex.height;
-        var aspectGap = aspect2 / aspect1;
-        var vMirrored = webcamTexture.videoVerticallyMirrored;
-        var toScale = new Vector2(aspectGap, vMirrored ? -1 : 1);
-        //var toScale = new Vector2(1,1);
-        var offset = new Vector2((1 - aspectGap) / 2, vMirrored ? 1 : 0);
+            var aspect1 = (float)webcamTexture.width / webcamTexture.height;
+            var aspect2 = (float)rTex.width / rTex.height;
+            var aspectGap = aspect2 / aspect1;
+            var vMirrored = webcamTexture.videoVerticallyMirrored;
+            var toScale = new Vector2(aspectGap, vMirrored ? -1 : 1);
+            //var toScale = new Vector2(1,1);
+            var offset = new Vector2((1 - aspectGap) / 2, vMirrored ? 1 : 0);
         
-        Graphics.Blit(webcamTexture, rTex, toScale, offset);
+            Graphics.Blit(webcamTexture, rTex, toScale, offset);
+            Graphics.Blit(webcamTexture, videoTexture); // Copy webcamTexture to videoTexture if using webcam
+        }
+        
 
-        // Copy webcamTexture to videoTexture if using webcam
+        
         //if (useWebcam) Graphics.Blit(webcamTexture, videoTexture);
-        Graphics.Blit(webcamTexture, videoTexture);
+        
         // Prevent the input dimensions from going too low for the model
         imageDims.x = Mathf.Max(imageDims.x, 64);
         imageDims.y = Mathf.Max(imageDims.y, 64);
@@ -208,7 +215,7 @@ public class PoseEstimator : MonoBehaviour
         }
 
         // Copy the src RenderTexture to the new rTex RenderTexture
-       // Graphics.Blit(videoTexture, rTex);
+        Graphics.Blit(videoTexture, rTex);
 
         // Prepare the input image to be fed to the selected model
         ProcessImage(rTex);
