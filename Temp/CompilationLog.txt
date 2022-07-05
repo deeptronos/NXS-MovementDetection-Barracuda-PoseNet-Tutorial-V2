@@ -1,4 +1,4 @@
 # Starting compiling Assembly-CSharp.dll
-/Applications/Unity/Hub/Editor/2020.3.33f1/Unity.app/Contents/Tools/RoslynScripts/unity_csc.sh /noconfig @Temp/UnityTempFile-08ca4e643ccad42cab455f387db55630
+/Applications/Unity/Hub/Editor/2020.3.33f1/Unity.app/Contents/Tools/RoslynScripts/unity_csc.sh /noconfig @Temp/UnityTempFile-6ff5e69b288c34e189923f323292052f
 # Starting IL post processing on Assembly-CSharp.dll
-/Applications/Unity/Hub/Editor/2020.3.33f1/Unity.app/Contents/MonoBleedingEdge/bin/mono "/Applications/Unity/Hub/Editor/2020.3.33f1/Unity.app/Contents/Tools/ILPostProcessorRunner/ILPostProcessorRunner.exe" @"/Users/colenemec/Desktop/nexersys/MovementDetectionUpgrade/NXS-MovementDetection-Barracuda-PoseNet-Tutorial-V2/Temp/UnityTempFile-6458ca0aff61a4361b65d59e784e09a7"
+/Applications/Unity/Hub/Editor/2020.3.33f1/Unity.app/Contents/MonoBleedingEdge/bin/mono "/Applications/Unity/Hub/Editor/2020.3.33f1/Unity.app/Contents/Tools/ILPostProcessorRunner/ILPostProcessorRunner.exe" @"/Users/colenemec/Desktop/nexersys/MovementDetectionUpgrade/NXS-MovementDetection-Barracuda-PoseNet-Tutorial-V2/Temp/UnityTempFile-4b167ee2d407843328067d578da1df6d"

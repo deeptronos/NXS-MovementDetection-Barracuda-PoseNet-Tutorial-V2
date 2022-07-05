@@ -22,7 +22,7 @@ public class LogKeypointMovement : MonoBehaviour
         lineRenderer = this.gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Unlit/Color")); // Make LineRenderer Shader Unlit
         lineRenderer.material.color = Color.cyan; // Set the material color
-        lineRenderer.positionCount = 2; // The line will consist of two points
+        lineRenderer.positionCount = 8; // The line will consist of two points
         lineRenderer.startWidth = 10f; // Set the width from the start point
         lineRenderer.endWidth = 5f;
     }
